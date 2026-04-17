@@ -9,30 +9,60 @@ Modern Lua-based Neovim configuration optimized for PHP and Web development, fea
 - **Statusline**: Airline configured to be informative yet discreet.
 - **Indentation Guides**: [indent-blankline](https://github.com/lukas-reineke/indent-blankline.nvim) for better code structure visualization.
 
+## 🚀 Installation
+
+### 1. Prerequisites
+Ensure you have the following installed:
+- **Neovim (0.9+)**
+- **Ripgrep** (for Telescope search)
+- **Node.js & npm** (for most LSP servers)
+- **Composer** (for PHP specific tools)
+- **Nerd Font** (e.g., JetBrainsMono Nerd Font)
+
+#### MacOS (using Homebrew)
+```bash
+brew install neovim ripgrep node composer
+```
+
+#### Linux (Ubuntu/Debian)
+```bash
+sudo apt install neovim ripgrep nodejs npm composer
+```
+
+### 2. Install Configuration
+Clone this repository and run the installer:
+```bash
+git clone https://github.com/your-username/nvim-config.git ~/.config/nvim-source
+cd ~/.config/nvim-source
+./install.sh
+```
+*Note: The installer will backup your existing `~/.config/nvim` if it exists.*
+
 ## 🔍 Search & Navigation (Telescope)
 Automatically detects project roots by searching for `.git` folders or `.project` files.
 
 | Keybinding | Action | Description |
 |------------|--------|-------------|
-| `<leader>f` | **Find Files** | Search for files by name within the project. |
-| `<leader>s` | **Live Grep** | Search for text/regex across the entire project. |
-| `<leader>r` | **Old Files** | MRU: Recently used files (history). |
-| `:M` | **Old Files** | Quick command for history (MRU). |
-| `<leader>fb` | **Buffers** | List currently open files. |
-| `<leader>gs` | **Git Status** | View modified files in the repository. |
-| `<leader>n` | **Explorer** | Toggle NvimTree (sidebar file explorer). |
+| `<leader>f` | **Find Files** | Search for files by name. |
+| `<leader>s` | **Live Grep** | Search for text across the project. |
+| `<leader>fb`| **Buffers** | List currently open files. |
+| `<leader>fr`| **Recent Files**| View recently used files. |
+| `<leader>gs`| **Git Status** | View modified files in the repo. |
+| `<leader>e` | **Explorer** | Toggle NvimTree sidebar. |
+| `<leader>n` | **Explorer** | Toggle NvimTree sidebar (alternative). |
 
 ## 💡 Code Intelligence (LSP)
-Native support for PHP (Phpactor/Intelephense), JS/TS, Python, HTML/CSS, etc.
+Native support for PHP (Phpactor), JS/TS, Python, etc.
 
 | Keybinding | Action |
 |------------|--------|
 | `gd` | Go to definition. |
 | `gr` | Find all references. |
-| `doc` | View documentation/signature under cursor. |
-| `<leader>rn` | Rename symbol project-wide. |
-| `<leader>ca` | Code Actions (quick fixes). |
-| `]d` / `[d` | Next/Previous error or warning. |
+| `K`  | View documentation/signature. |
+| `<leader>rn` | Rename symbol. |
+| `<leader>ca` | Code Actions. |
+| `]d` / `[d` | Next/Previous error. |
+
 
 ### PHP Specific (Phpactor)
 - `<leader>u`: Automatically add `use` statements.

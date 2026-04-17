@@ -1,0 +1,24 @@
+# Neovim cache and state
+.netrwhist
+undo/
+backups/
+swp/
+tags
+
+# Plugin managers
+# lazy-lock.json is NOT ignored to ensure consistent plugin versions
+
+# Local config
+.nvimrc
+.exrc
+
+# System files
+.DS_Store
+
+# Transient/Workspace files
+.aider.chat.history.md
+Vout.log
+CONVERSION_SUMMARY.md
+repro_go.sh
+structure.md
+nvim-ide/
