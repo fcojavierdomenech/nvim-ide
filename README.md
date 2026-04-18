@@ -17,22 +17,33 @@ Ensure you have the following installed:
 - **Ripgrep** (for Telescope search)
 - **Node.js & npm** (for most LSP servers)
 - **Composer** (for PHP specific tools)
-- **Nerd Font** (e.g., JetBrainsMono Nerd Font)
+- **Go & gopls** (for Go support)
+- **Nerd Font** (REQUIRED for icons, e.g., JetBrainsMono Nerd Font)
 
 #### MacOS (using Homebrew)
 ```bash
-brew install neovim ripgrep node composer
+# Install core tools
+brew install neovim ripgrep node composer go
+
+# Install gopls
+go install golang.org/x/tools/gopls@latest
+
+# Install Nerd Font (Fixes [?] icons)
+brew install --cask font-jetbrains-mono-nerd-font
 ```
+
+> **CRITICAL**: After installing the font, you MUST set your Terminal's font to `JetBrainsMono Nerd Font` in its settings (Profiles -> Text -> Font), otherwise icons will appear as `?`.
 
 #### Linux (Ubuntu/Debian)
 ```bash
 sudo apt install neovim ripgrep nodejs npm composer
+# Download a Nerd Font from https://www.nerdfonts.com/font-downloads
 ```
 
 ### 2. Install Configuration
 Clone this repository and run the installer:
 ```bash
-git clone https://github.com/your-username/nvim-config.git ~/.config/nvim-source
+git clone https://github.com/fcojavierdomenech/nvim-ide.git ~/.config/nvim-source
 cd ~/.config/nvim-source
 ./install.sh
 ```
@@ -63,6 +74,16 @@ Native support for PHP (Phpactor), JS/TS, Python, etc.
 | `<leader>ca` | Code Actions. |
 | `]d` / `[d` | Next/Previous error. |
 
+
+### Go Support (gopls)
+Native support for Go development via `gopls`.
+- **To enable**: Follow the installation steps in Prerequisites and ensure `export PATH=$PATH:$(go env GOPATH)/bin` is in your `.zshrc`.
+- **To disable**: Simply do not install `gopls`.
+
+### 🤖 AI Assistance (GitHub Copilot)
+The official GitHub Copilot plugin is integrated.
+- **Setup**: To authenticate (especially for the free plan), run `:Copilot setup` inside Neovim.
+- **Keybindings**: `Ctrl + y` to accept suggestions.
 
 ### PHP Specific (Phpactor)
 - `<leader>u`: Automatically add `use` statements.
@@ -98,4 +119,5 @@ Ensure you have the following installed for full functionality:
 - `ripgrep` (for Telescope)
 - `npm/nodejs` (for LSP servers)
 - `composer` (for PHP tools)
+- `go` & `gopls` (for Go support)
 - `Nerd Fonts` (for icons)

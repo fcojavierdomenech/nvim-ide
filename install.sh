@@ -75,6 +75,31 @@ else
     print_status "Found ripgrep"
 fi
 
+# Check if Go is installed
+if ! command -v go &> /dev/null; then
+    print_warning "Go is not installed. Go LSP features will not work."
+else
+    go_version=$(go version | cut -d' ' -f3)
+    print_status "Found Go version: $go_version"
+fi
+
+# Check if gopls is installed
+if ! command -v gopls &> /dev/null; then
+    print_warning "gopls is not installed. Run: go install golang.org/x/tools/gopls@latest"
+else
+    print_status "Found gopls"
+fi
+
+# Check if Nerd Font is installed (macOS specific check)
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    if ! mdfind "kMDItemFSName == '*Nerd Font*'" | grep -q "."; then
+        print_warning "No Nerd Font detected. Icons may appear as [?]."
+        print_status "Install one with: brew install --cask font-jetbrains-mono-nerd-font"
+    else
+        print_status "Found a Nerd Font"
+    fi
+fi
+
 # Backup existing configuration
 if [ -d "$HOME/.config/nvim" ]; then
     backup_dir="$HOME/.config/nvim.backup.$(date +%Y%m%d_%H%M%S)"
@@ -116,15 +141,17 @@ echo "Next steps:"
 echo "1. Start Neovim: nvim"
 echo "2. Wait for lazy.nvim to install plugins automatically"
 echo "3. Run :Mason to install language servers if needed"
-echo "4. Install a Nerd Font for proper icon display"
+echo "4. Run :Copilot setup to enable AI assistance"
+echo "5. Set your Terminal font to 'JetBrainsMono Nerd Font'"
 echo ""
 echo "Key mappings:"
 echo "  <Space> - Leader key"
-echo "  <leader>ff - Find files"
-echo "  <leader>fg - Live grep"
+echo "  <leader>f - Find files"
+echo "  <leader>s - Live grep"
 echo "  <leader>e - Toggle file explorer"
 echo "  gd - Go to definition"
 echo "  K - Hover documentation"
+echo "  Ctrl + y - Accept Copilot suggestion"
 echo ""
 echo "For more information, see the README.md file."
 echo ""
