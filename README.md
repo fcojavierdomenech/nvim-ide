@@ -13,7 +13,8 @@ Modern Lua-based Neovim configuration optimized for PHP and Web development, fea
 
 ### 1. Prerequisites
 Ensure you have the following installed:
-- **Neovim (0.9+)**
+- **Neovim (0.12.0+)**
+- **tree-sitter-cli** (Required for the new nvim-treesitter rewrite)
 - **Ripgrep** (for Telescope search)
 - **Node.js & npm** (for most LSP servers)
 - **Composer** (for PHP specific tools)
@@ -23,7 +24,7 @@ Ensure you have the following installed:
 #### MacOS (using Homebrew)
 ```bash
 # Install core tools
-brew install neovim ripgrep node composer go
+brew install neovim tree-sitter-cli ripgrep node composer
 
 # Install gopls
 go install golang.org/x/tools/gopls@latest
@@ -75,16 +76,6 @@ Native support for PHP (Phpactor), JS/TS, Python, etc.
 | `]d` / `[d` | Next/Previous error. |
 
 
-### Go Support (gopls)
-Native support for Go development via `gopls`.
-- **To enable**: Follow the installation steps in Prerequisites and ensure `export PATH=$PATH:$(go env GOPATH)/bin` is in your `.zshrc`.
-- **To disable**: Simply do not install `gopls`.
-
-### 🤖 AI Assistance (GitHub Copilot)
-The official GitHub Copilot plugin is integrated.
-- **Setup**: To authenticate (especially for the free plan), run `:Copilot setup` inside Neovim.
-- **Keybindings**: `Ctrl + y` to accept suggestions.
-
 ### PHP Specific (Phpactor)
 - `<leader>u`: Automatically add `use` statements.
 - `<leader>mm`: Phpactor context menu.
@@ -113,6 +104,29 @@ The official GitHub Copilot plugin is integrated.
 │       ├── lsp.lua
 │       └── ...
 ```
+
+### Go Support (gopls)
+Native support for Go development via `gopls`.
+
+- **To enable**: Install Go and gopls on your system:
+  ```bash
+  brew install go
+  go install golang.org/x/tools/gopls@latest
+  ```
+  And ensure your PATH includes the Go binaries: `export PATH=$PATH:$(go env GOPATH)/bin` in your `.zshrc`.
+- **To disable**: If you don't want Go support, you can simply not install `gopls` or remove the `go` configuration from `lua/config/plugins.lua`.
+
+### 🤖 AI Assistance (GitHub Copilot)
+The official GitHub Copilot plugin is integrated.
+
+- **Setup**: To authenticate (especially for the free plan), run:
+  ```vim
+  :Copilot setup
+  ```
+  Follow the browser instructions with the 8-digit code provided.
+- **Keybindings**:
+  - `Ctrl + y`: Accept suggestion.
+  - `:Copilot disable`: Turn off Copilot for the current session.
 
 ## 🚀 Dependencies
 Ensure you have the following installed for full functionality:

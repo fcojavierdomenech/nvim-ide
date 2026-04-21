@@ -142,7 +142,16 @@ local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 -- Server configurations using the new vim.lsp.config (Neovim 0.11+)
 local servers = {
-	phpactor = {},
+	phpactor = {
+		root_dir = function(bufnr_or_fname)
+			local fname = type(bufnr_or_fname) == "number" and vim.api.nvim_buf_get_name(bufnr_or_fname)
+				or bufnr_or_fname
+			if fname:find("fugitive://") then
+				return nil
+			end
+			return require("lspconfig.util").root_pattern("composer.json", ".git", "phpactor.json")(fname)
+		end,
+	},
 	intelephense = {
 		settings = {
 			intelephense = {

@@ -5,7 +5,7 @@ vim.keymap.set("n", "<Leader>cu", ":call phpactor#UseAdd()<CR>", { desc = "Code:
 vim.keymap.set("n", "<Leader>cm", ":call phpactor#ContextMenu()<CR>", { desc = "Code: Context Menu (PHP)" })
 vim.keymap.set("n", "<Leader>cn", ":call phpactor#Navigate()<CR>", { desc = "Code: Navigate (PHP)" })
 vim.keymap.set("n", "<Leader>ct", ":call phpactor#Transform()<CR>", { desc = "Code: Transform/Refactor (PHP)" })
-vim.keymap.set("n", "<Leader>cc", ":call phpactor#ClassNew()<CR>", { desc = "Code: New Class (PHP)" })
+vim.keymap.set("n", "<Leader>cN", ":call phpactor#ClassNew()<CR>", { desc = "Code: New Class (PHP)" })
 vim.keymap.set("n", "<Leader>cx", ":call phpactor#ClassExpand()<CR>", { desc = "Code: Class Expand (PHP)" })
 
 -- Extraction remains under <leader>r for consistency with other languages
