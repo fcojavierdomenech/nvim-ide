@@ -55,7 +55,7 @@ telescope.setup({
 
 -- Keymaps
 vim.keymap.set('n', '<leader>f', function() require('telescope.builtin').find_files({ cwd = get_project_root() }) end, { desc = 'Find Files' })
-vim.keymap.set('n', '<leader>s', function() require('telescope.builtin').live_grep({ cwd = get_project_root() }) end, { desc = 'Live Grep (Global Search)' })
+vim.keymap.set('n', '<leader>s', function() require('telescope.builtin').live_grep({ cwd = get_project_root(), default_text = vim.fn.expand("<cword>") }) end, { desc = 'Live Grep (Search word under cursor)' })
 vim.keymap.set('n', '<leader>fb', function() require('telescope.builtin').buffers() end, { desc = 'Buffers' })
 vim.keymap.set('n', '<leader>fh', function() require('telescope.builtin').help_tags() end, { desc = 'Help Tags' })
 vim.keymap.set('n', '<leader>fr', function() require('telescope.builtin').oldfiles() end, { desc = 'Recent Files' })

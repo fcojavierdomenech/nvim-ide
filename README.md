@@ -56,7 +56,7 @@ Automatically detects project roots by searching for `.git` folders or `.project
 | Keybinding | Action | Description |
 |------------|--------|-------------|
 | `<leader>f` | **Find Files** | Search for files by name. |
-| `<leader>s` | **Live Grep** | Search for text across the project. |
+| `<leader>s` | **Live Grep** | Search for word under cursor across the project. |
 | `<leader>fb`| **Buffers** | List currently open files. |
 | `<leader>fr`| **Recent Files**| View recently used files. |
 | `<leader>gs`| **Git Status** | View modified files in the repo. |

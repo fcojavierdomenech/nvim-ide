@@ -31,7 +31,11 @@ vim.api.nvim_create_autocmd("InsertCharPre", {
 -- Auto-import missing classes on save
 vim.api.nvim_create_autocmd("BufWritePost", {
 	pattern = "*.php",
-	command = "PhpactorImportMissingClasses",
+	callback = function()
+		if vim.bo.filetype == "php" then
+			vim.cmd("PhpactorImportMissingClasses")
+		end
+	end,
 })
 
 -- Set omnifunc for Composer projects
