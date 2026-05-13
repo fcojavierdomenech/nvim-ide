@@ -15,13 +15,39 @@ conform.setup({
         yaml = {'prettier'},
         lua = {'stylua'},
     },
-    format_on_save = {
-        timeout_ms = 500,
-        lsp_fallback = true,
-    },
+    format_on_save = function(bufnr)
+        -- Disable with a global or buffer-local variable
+        if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+            return
+        end
+        return { timeout_ms = 500, lsp_fallback = true }
+    end,
 })
 
--- Format command
+-- Format commands
+vim.api.nvim_create_user_command("FormatDisable", function(args)
+    if args.bang then
+        -- FormatDisable! will disable formatting globally
+        vim.g.disable_autoformat = true
+        print("Autoformat on save disabled globally")
+    else
+        vim.b.disable_autoformat = true
+        print("Autoformat on save disabled for this buffer")
+    end
+end, {
+    desc = "Disable autoformat-on-save",
+    bang = true,
+})
+
+vim.api.nvim_create_user_command("FormatEnable", function()
+    vim.b.disable_autoformat = false
+    vim.g.disable_autoformat = false
+    print("Autoformat on save enabled")
+end, {
+    desc = "Re-enable autoformat-on-save",
+})
+
+-- Format command manually
 vim.api.nvim_create_user_command('Format', function(args)
     local range = nil
     if args.count ~= -1 then
@@ -38,3 +64,20 @@ end, { range = true })
 vim.keymap.set({'n', 'v'}, '<leader>cf', function()
     conform.format({ async = true, lsp_fallback = true })
 end, { desc = 'Code: Format buffer/selection' })
+
+
+
+-- Indentation commands
+vim.api.nvim_create_user_command("Tab2spaces", function()
+    vim.opt_local.shiftwidth = 2
+    vim.opt_local.softtabstop = 2
+    vim.opt_local.expandtab = true
+    print("Indentation set to 2 spaces")
+end, { desc = "Set indentation to 2 spaces" })
+
+vim.api.nvim_create_user_command("Tab4spaces", function()
+    vim.opt_local.shiftwidth = 4
+    vim.opt_local.softtabstop = 4
+    vim.opt_local.expandtab = true
+    print("Indentation set to 4 spaces")
+end, { desc = "Set indentation to 4 spaces" })
