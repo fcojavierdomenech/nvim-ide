@@ -155,6 +155,7 @@ require("lazy").setup({
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			"nvim-treesitter/nvim-treesitter",
+			"lewis6991/async.nvim",
 		},
 		config = function()
 			require("refactoring").setup()
@@ -333,4 +334,21 @@ require("lazy").setup({
 	-- Optional:
 	"rcarriga/nvim-notify",
 	"stevearc/dressing.nvim",
+
+	-- Gemini Companion
+	{
+		"gutsavgupta/nvim-gemini-companion",
+		dependencies = { "nvim-lua/plenary.nvim" },
+		event = "VeryLazy",
+		config = function()
+			require("gemini").setup({
+				cmds = { "gemini" }, -- Only enable gemini as per current setup
+			})
+		end,
+		keys = {
+			{ "<leader>gg", "<cmd>GeminiToggle<cr>", desc = "Toggle Gemini sidebar" },
+			{ "<leader>gc", "<cmd>GeminiSwitchToCli<cr>", desc = "Spawn or switch to AI session" },
+			{ "<leader>gS", "<cmd>GeminiSend<cr>", mode = { "x" }, desc = "Send selection to Gemini" },
+		},
+	},
 })
