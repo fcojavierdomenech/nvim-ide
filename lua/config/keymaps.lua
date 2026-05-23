@@ -189,3 +189,8 @@ end, desc("Toggle Gemini and Sync Context"))
 -- Gemini: Accept/Reject Diff
 keymap("n", "<leader>ga", "<cmd>GeminiAccept<CR>", desc("Gemini: Accept Diff"))
 keymap("n", "<leader>gr", "<cmd>GeminiReject<CR>", desc("Gemini: Reject Diff"))
+
+-- Buffer Manager
+keymap("n", "<leader>b", function()
+	require("config.utils").open_buffer_manager()
+end, desc("Open Floating Buffer Manager"))
