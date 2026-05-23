@@ -163,16 +163,17 @@ autocmd("FileChangedShellPost", {
 autocmd({ "TermOpen", "BufEnter" }, {
     group = general,
     pattern = "*", 
-    callback = function()
-        if vim.bo.filetype == "terminalGemini" or vim.api.nvim_buf_get_name(0):match("gemini") then
+    callback = function(args)
+        -- Use args.buf to check the filetype of the buffer that triggered the event
+        -- This avoids recursion when we manually trigger BufEnter for another buffer
+        if vim.bo[args.buf].filetype == "terminalGemini" then
             -- Safely fetch the file you came from
             local last_buf = vim.fn.bufnr('#')
             
             -- Only trigger if the previous buffer was an actual, readable file
-            if last_buf > 0 and vim.api.nvim_buf_get_option(last_buf, 'buflisted') then
+            -- and NOT the gemini buffer itself
+            if last_buf > 0 and last_buf ~= args.buf and vim.bo[last_buf].buflisted then
                 vim.api.nvim_exec_autocmds("BufEnter", { buffer = last_buf })
-                -- Optional: Notify to confirm it's working (can be removed later)
-                -- vim.notify("Gemini context synced with " .. vim.fn.bufname(last_buf), vim.log.levels.INFO)
             end
         end
     end,
