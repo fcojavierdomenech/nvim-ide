@@ -160,17 +160,20 @@ autocmd("FileChangedShellPost", {
 })
 
 -- Safely refresh context ONLY when the Gemini sidebar opens
-autocmd("TermOpen", {
+autocmd({ "TermOpen", "BufEnter" }, {
     group = general,
-    -- Change pattern from "*" to only match terminal names containing "gemini"
-    pattern = "*gemini*", 
+    pattern = "*", 
     callback = function()
-        -- Safely fetch the file you came from
-        local last_buf = vim.fn.bufnr('#')
-        
-        -- Only trigger if the previous buffer was an actual, readable file
-        if last_buf > 0 and vim.api.nvim_buf_get_option(last_buf, 'buflisted') then
-            vim.api.nvim_exec_autocmds("BufEnter", { buffer = last_buf })
+        if vim.bo.filetype == "terminalGemini" or vim.api.nvim_buf_get_name(0):match("gemini") then
+            -- Safely fetch the file you came from
+            local last_buf = vim.fn.bufnr('#')
+            
+            -- Only trigger if the previous buffer was an actual, readable file
+            if last_buf > 0 and vim.api.nvim_buf_get_option(last_buf, 'buflisted') then
+                vim.api.nvim_exec_autocmds("BufEnter", { buffer = last_buf })
+                -- Optional: Notify to confirm it's working (can be removed later)
+                -- vim.notify("Gemini context synced with " .. vim.fn.bufname(last_buf), vim.log.levels.INFO)
+            end
         end
     end,
 })
