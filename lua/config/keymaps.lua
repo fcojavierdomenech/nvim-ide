@@ -80,10 +80,30 @@ keymap("n", "<Leader>hi", function()
 end, desc("Inspect syntax highlight group under cursor"))
 
 -- HTML encode/decode (requires perl)
-keymap("n", "<Leader>h", ":silent %!perl -CIO -MHTML::Entities -pe '$_=encode_entities $_'<CR>", desc("HTML Encode buffer (normal)"))
-keymap("v", "<Leader>h", ":silent '<,'>!perl -CIO -MHTML::Entities -pe '$_=encode_entities $_'<CR>", desc("HTML Encode selection (visual)"))
-keymap("n", "<Leader>H", ":silent %!perl -CI -MHTML::Entities -pe '$_=decode_entities $_'<CR>", desc("HTML Decode buffer (normal)"))
-keymap("v", "<Leader>H", ":silent '<,'>!perl -CI -MHTML::Entities -pe '$_=decode_entities $_'<CR>", desc("HTML Decode selection (visual)"))
+keymap(
+	"n",
+	"<Leader>h",
+	":silent %!perl -CIO -MHTML::Entities -pe '$_=encode_entities $_'<CR>",
+	desc("HTML Encode buffer (normal)")
+)
+keymap(
+	"v",
+	"<Leader>h",
+	":silent '<,'>!perl -CIO -MHTML::Entities -pe '$_=encode_entities $_'<CR>",
+	desc("HTML Encode selection (visual)")
+)
+keymap(
+	"n",
+	"<Leader>H",
+	":silent %!perl -CI -MHTML::Entities -pe '$_=decode_entities $_'<CR>",
+	desc("HTML Decode buffer (normal)")
+)
+keymap(
+	"v",
+	"<Leader>H",
+	":silent '<,'>!perl -CI -MHTML::Entities -pe '$_=decode_entities $_'<CR>",
+	desc("HTML Decode selection (visual)")
+)
 
 -- English keyboard mappings
 keymap("i", "ç", "->", desc("Quick arrow (ç -> ->)"))
@@ -102,12 +122,16 @@ vim.api.nvim_create_user_command("MH", "split | Telescope oldfiles", {})
 keymap("n", "<leader>n", "<cmd>NvimTreeToggle<CR>", desc("Toggle NvimTree File Explorer"))
 
 -- Refactoring (refactoring.nvim)
-keymap({"n", "x"}, "<leader>rr", function() require('refactoring').select_refactor() end, desc("Refactor: Show menu"))
+keymap({ "n", "x" }, "<leader>rr", function()
+	require("refactoring").select_refactor()
+end, desc("Refactor: Show menu"))
 keymap("x", "<leader>re", ":Refactor extract ", desc("Refactor: Extract selection to function"))
 keymap("x", "<leader>rf", ":Refactor extract_to_file ", desc("Refactor: Extract selection to file"))
 keymap("x", "<leader>rv", ":Refactor extract_var ", desc("Refactor: Extract selection to variable"))
 keymap("n", "<leader>rl", ":Refactor inline_var", desc("Refactor: Inline (mOve) variable into use"))
-keymap("n", "<leader>ri", function() _G.organize_imports() end, desc("Refactor: Organize/Clean Imports"))
+keymap("n", "<leader>ri", function()
+	_G.organize_imports()
+end, desc("Refactor: Organize/Clean Imports"))
 keymap("n", "<leader>rb", ":Refactor extract_block", desc("Refactor: Extract block to function"))
 keymap("n", "<leader>rfb", ":Refactor extract_block_to_file", desc("Refactor: Extract block to file"))
 keymap("n", "<leader>rc", ":PhpactorExtractConstant<CR>", desc("Refactor: Extract Constant (PHP Only)"))
@@ -122,7 +146,7 @@ vim.keymap.set("i", "<C-y>", 'copilot#Accept("\\<CR>")', {
 	silent = true,
 	expr = true,
 	replace_keycodes = false,
-    desc = "Copilot: Accept suggestion"
+	desc = "Copilot: Accept suggestion",
 })
 
 -- Commenting & Documentation
@@ -130,4 +154,34 @@ keymap("n", "<Leader>cc", "gcc", { remap = true, desc = "Code: Toggle line comme
 keymap("v", "<Leader>cc", "gc", { remap = true, desc = "Code: Toggle selection comment" })
 keymap("n", "<Leader>cb", "gbc", { remap = true, desc = "Code: Toggle block comment" })
 keymap("v", "<Leader>cb", "gb", { remap = true, desc = "Code: Toggle selection block comment" })
-keymap("v", "<Leader>cd", 'S"""', { remap = true, desc = "Code: Wrap in Docstring (\"\"\")" })
+keymap("v", "<Leader>cd", 'S"""', { remap = true, desc = 'Code: Wrap in Docstring (""")' })
+
+-- Gemini: Toggle and Sync Context Safely
+keymap("n", "<leader>gg", function()
+	-- 1. Save the current window (code window)
+	local code_win = vim.api.nvim_get_current_win()
+
+	-- 2. Toggle the sidebar
+	vim.cmd("GeminiToggle")
+
+	-- 3. Wait for the CLI to connect and stabilize, then force a sync
+	vim.defer_fn(function()
+		local term_win = vim.api.nvim_get_current_win()
+		local term_buf = vim.api.nvim_get_current_buf()
+
+		-- Only sync if we are in the terminal and the code window is still valid
+		if vim.bo[term_buf].filetype == "terminalGemini" and vim.api.nvim_win_is_valid(code_win) then
+			-- 4. Move focus back to the code window
+			vim.api.nvim_set_current_win(code_win)
+
+			-- 5. Stay there for 200ms to ensure the plugin registers the focus
+			vim.defer_fn(function()
+				-- 6. Move focus back to the terminal
+				if vim.api.nvim_win_is_valid(term_win) then
+					vim.api.nvim_set_current_win(term_win)
+					vim.cmd("startinsert")
+				end
+			end, 200)
+		end
+	end, 5000)
+end, desc("Toggle Gemini and Sync Context"))
