@@ -185,3 +185,7 @@ keymap("n", "<leader>gg", function()
 		end
 	end, 5000)
 end, desc("Toggle Gemini and Sync Context"))
+
+-- Gemini: Accept/Reject Diff
+keymap("n", "<leader>ga", "<cmd>GeminiAccept<CR>", desc("Gemini: Accept Diff"))
+keymap("n", "<leader>gr", "<cmd>GeminiReject<CR>", desc("Gemini: Reject Diff"))
