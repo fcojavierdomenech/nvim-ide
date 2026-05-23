@@ -40,6 +40,9 @@ keymap("n", "dN", "[c", desc("Previous diff hunk"))
 keymap("i", "jk", "<Esc>", desc("Exit insert mode (jk)"))
 keymap("i", "kj", "<Esc>", desc("Exit insert mode (kj)"))
 
+-- Exit terminal mode
+keymap("t", "<Esc><Esc>", [[<C-\><C-n>]], desc("Exit terminal mode"))
+
 -- Suspend vim
 keymap("i", "<C-z>", "<Esc><C-z>", desc("Suspend Neovim (background)"))
 
