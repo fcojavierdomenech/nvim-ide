@@ -158,3 +158,19 @@ autocmd("FileChangedShellPost", {
         vim.api.nvim_echo({ { "File changed on disk. Buffer reloaded!", "WarningMsg" } }, true, {})
     end,
 })
+
+-- Safely refresh context ONLY when the Gemini sidebar opens
+autocmd("TermOpen", {
+    group = general,
+    -- Change pattern from "*" to only match terminal names containing "gemini"
+    pattern = "*gemini*", 
+    callback = function()
+        -- Safely fetch the file you came from
+        local last_buf = vim.fn.bufnr('#')
+        
+        -- Only trigger if the previous buffer was an actual, readable file
+        if last_buf > 0 and vim.api.nvim_buf_get_option(last_buf, 'buflisted') then
+            vim.api.nvim_exec_autocmds("BufEnter", { buffer = last_buf })
+        end
+    end,
+})
