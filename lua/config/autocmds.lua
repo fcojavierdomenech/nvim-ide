@@ -165,15 +165,23 @@ autocmd({ "TermOpen", "BufEnter" }, {
     pattern = "*", 
     callback = function(args)
         -- Use args.buf to check the filetype of the buffer that triggered the event
-        -- This avoids recursion when we manually trigger BufEnter for another buffer
         if vim.bo[args.buf].filetype == "terminalGemini" then
             -- Safely fetch the file you came from
             local last_buf = vim.fn.bufnr('#')
             
+            -- If bufnr('#') is not valid (e.g. after window movements), 
+            -- we can try to fall back to a previously tracked buffer if we had one
+            -- but for now let's stick to the user's logic with a delay
+            
             -- Only trigger if the previous buffer was an actual, readable file
             -- and NOT the gemini buffer itself
             if last_buf > 0 and last_buf ~= args.buf and vim.bo[last_buf].buflisted then
-                vim.api.nvim_exec_autocmds("BufEnter", { buffer = last_buf })
+                -- Delay to allow the gemini-cli to finish starting up and connect to the IDE
+                vim.defer_fn(function()
+                    if vim.api.nvim_buf_is_valid(last_buf) then
+                        vim.api.nvim_exec_autocmds("BufEnter", { buffer = last_buf })
+                    end
+                end, 500)
             end
         end
     end,
